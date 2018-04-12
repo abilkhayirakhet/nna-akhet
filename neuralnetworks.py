@@ -1,18 +1,45 @@
 import pandas as panda
+import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.neural_network import MLPClassifier
 
 dataset = panda.read_csv("mushrooms.csv")
 datasetHeaders = []
 convertedToIntegerValues = []
+newValues = []
 
 for column in dataset:
     datasetHeaders.append(dataset[column].name)
 
 for valueArr in dataset.values:
+
     for value in valueArr:
-        #print(ord(value))
-        convertedToIntegerValues.append(ord(value))
+        #newValues.append([valueArr, ord(value)]) #convertedToIntegerValues.append(ord(value))
+        newValues[value] = ord(value)
+
+print(newValues)
+exit()
+
+     #   newValues = [valueArr, ord(value)]
+print(newValues)
+exit()
+
+
+
+
+df2 = panda.DataFrame(convertedToIntegerValues,columns=datasetHeaders)
+print(df2)
+exit()
+
+ds2 = panda.DataFrame.from_records(
+    datasetHeaders,
+    convertedToIntegerValues,
+    index=None,
+    exclude=None,
+    columns=None,
+    coerce_float=False,
+    #nrows=None
+)
 
 #print(convertedToIntegerValues)
 
