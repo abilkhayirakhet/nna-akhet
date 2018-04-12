@@ -1,12 +1,17 @@
 import pandas as panda
-import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.neural_network import MLPClassifier
+
 
 from methods import load_csv
 from methods import convertCharToInteger
 from methods import getLinesForWriting
 from methods import getDigitalCsvFile
+from methods import write_bold
+
+
+training_accuracy = []
+testing_accuracy = []
 
 load_csv("mushrooms.csv")
 
@@ -26,16 +31,51 @@ for column in dataset:
 
 train_x, test_x, train_y, test_y = train_test_split(dataset[datasetHeaders[1:-1]], dataset[datasetHeaders[-1]])
 
-# for i in range(10):
-#clf = MLPClassifier(activation="identity",learning_rate="invscaling")
-#clf = MLPClassifier(activation="logistic")
-#clf = MLPClassifier(activation="tanh")
-clf = MLPClassifier(hidden_layer_sizes=(13,13),activation="relu", max_iter=300)
-
-clf.fit(train_x, train_y)
+activations = ['identity', 'logistic', 'tanh', 'relu']
+solvers = ['lbfgs', 'sgd', 'adam']
+learning_rates = ['constant', 'invscaling', 'adaptive']
 
 print(converted_file)
 
-print("Training Accuracy  :", clf.score(train_x, train_y))
 
-print("Test Accuracy      :", clf.score(test_x, test_y))
+def classify(activation='relu', solver='adam', learning_rate='constant'):
+    clf = MLPClassifier(
+        activation=activation,
+        solver=solver,
+        learning_rate=learning_rate,
+    )
+
+    clf.fit(train_x, train_y)
+
+    print(
+        "Activation is " + write_bold(activation) +
+        " Solver is " + write_bold(solver)+
+        " Learning rate is  " + write_bold(learning_rate)
+    )
+
+    train_accuracy = clf.score(train_x, train_y)
+    test_accuracy = clf.score(test_x, test_y)
+
+    training_accuracy.append({"'" + activation+solver+learning_rate+ "'":train_accuracy})
+    testing_accuracy.append({"'" + activation+ solver+ learning_rate + "'": test_accuracy})
+
+    print("Training Accuracy  :", train_accuracy)
+
+    print("Test Accuracy      :", test_accuracy)
+
+
+for activation in activations:
+    for solver in solvers:
+        for learning_rate in learning_rates:
+            classify(
+                activation,
+                solver,
+                learning_rate,
+            )
+
+print(write_bold("Finished"))
+
+print(training_accuracy)
+print(testing_accuracy)
+
+

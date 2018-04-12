@@ -44,3 +44,8 @@ def get_data_set_headers(filename):
     headers = getLinesForWriting(dataset[:1])
     return headers[0]
 
+def write_bold(input_string):
+    bold = "\033[1m"
+    boldReset = "\033[0;0m"
+    return bold + input_string + boldReset
+
