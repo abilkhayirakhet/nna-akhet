@@ -1,6 +1,5 @@
 from csv import reader
-from csv import writer
-
+from random import randint
 
 # Load a CSV file
 def load_csv(filename):
@@ -8,11 +7,6 @@ def load_csv(filename):
     lines = reader(file)
     dataset = list(lines)
     return dataset
-
-
-dataset = load_csv('mushrooms.csv')
-values = dataset[1:]
-
 
 def convertCharToInteger(values):
     intvalues = []
@@ -23,5 +17,30 @@ def convertCharToInteger(values):
         intvalues.append(chararray)
     return intvalues
 
+def getLinesForWriting(data):
 
-print(convertCharToInteger(values))
+    lines = []
+
+    for line in data:
+        lineString = ''
+        for numbers in line:
+            lineString += str(numbers) + ','
+        lines.append(lineString[:-1])
+    return lines
+
+def getDigitalCsvFile(lines):
+    randnumber = randint(1, 100)
+    filename = str(randnumber) + '_mushrooms' + '.csv'
+    with open(filename, 'a') as the_file:
+        the_file.write(get_data_set_headers("mushrooms.csv") + '\n')
+        for line in lines:
+            the_file.write(line + '\n')
+    return filename
+
+def get_data_set_headers(filename):
+    file = open(filename, "r")
+    lines = reader(file)
+    dataset = list(lines)
+    headers = getLinesForWriting(dataset[:1])
+    return headers[0]
+
