@@ -1,6 +1,7 @@
 import pandas as panda
 from sklearn.model_selection import train_test_split
 from sklearn.neural_network import MLPClassifier
+from sklearn.preprocessing import StandardScaler
 
 
 from methods import load_csv
@@ -30,6 +31,14 @@ for column in dataset:
 
 
 train_x, test_x, train_y, test_y = train_test_split(dataset[datasetHeaders[1:-1]], dataset[datasetHeaders[-1]])
+
+scaler = StandardScaler()
+
+scaler.fit(train_x)
+
+train_x = scaler.transform(train_x)
+
+test_x = scaler.transform(test_x)
 
 activations = ['identity', 'logistic', 'tanh', 'relu']
 solvers = ['lbfgs', 'sgd', 'adam']
